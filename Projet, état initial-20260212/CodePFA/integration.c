@@ -92,7 +92,23 @@ void printQuadFormula(QuadFormula* qf)
 */
 double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf)
 {
-  return 0.0;
+  double inte = 0;
+
+  for (int i = 0; i < N; i++) {
+      int ai = a + i * b - a / N;
+      int bi = a + (i + 1) * b - a / N;
+      int res = 0;
+      int len = b - a / N;
+      for (int k = 0; k < qf->N; k++) {
+        res += qf->w[k] * f( ai + qf->x[k] * (bi - ai));
+
+      }
+      res *= bi - ai;
+
+    inte += res;
+
+  }
+  return inte;
 }
 
 double integrate_dx(double (*f)(double), double a, double b, double dx, QuadFormula* qf)
