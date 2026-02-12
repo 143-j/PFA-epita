@@ -3,11 +3,21 @@
 /* Creation date: 31 July, 2025                       */
 /******************************************************/
 
+#include <math.h>
 #include "integration.h"
-
-/* Code here everything you need to test the integration methods and show your numericzal results */
-
-int main()
+double f(double t)
 {
-  return 0;
+  return sin(t*t);
 }
+int main() {
+  QuadFormula qf;
+  double I1, I2, I3;
+  setQuadFormula(&qf, "trapezes");
+  I1 = integrate(f, -1, 4, 10, &qf);
+  setQuadFormula(&qf, "middle");
+  I2 = integrate(f, -1, 4, 10, &qf);
+}
+
+
+
+
