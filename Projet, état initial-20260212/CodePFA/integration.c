@@ -1,14 +1,79 @@
-
-
-
-
 #define INTEGRATION_C
 
 #include "integration.h"
 
 bool setQuadFormula(QuadFormula* qf, char* name)
 {
-  return true;
+  if (strcmp(name,"left"))
+  {
+      qf->name = name;
+      qf->n = 0;
+      qf->wk[0] = 1;
+      qf->xk[0] = 0;
+      return true;
+  }
+  else if (strcmp(name,"right"))
+  {
+      qf->name = name;
+      qf->n = 0;
+      qf->wk[0] = 1;
+      qf->xk[0] = 1;
+      return true;
+  }
+  if (strcmp(name,"middle"))
+  {
+      qf->name = name;
+      qf->n = 0;
+      qf->wk[0] = 1;
+      qf->xk[0] = 1/2;
+      return true;
+  }
+  if (strcmp(name,"trapezes"))
+  {
+      qf->name = name;
+      qf->n = 1;
+      qf->wk[0] = 1/2;
+      qf->wk[1] = 1/2; 
+      qf->xk[0] = 0;
+      qf->xk[1] = 1;
+      return true;
+  }
+  if (strcmp(name,"simpson"))
+  {
+      qf->name = name;
+      qf->n = 3;
+      qf->wk[0] = 1/6;
+      qf->wk[1] = 2/3;
+      qf->wk[2] = 1/6;
+      qf->xk[0] = 0;
+      qf->xk[1] = 
+      return true;
+  }
+  if (strcmp(name,"gauss2"))
+  {
+      qf->name = name;
+      qf->n = 2;
+      qf->wk[0] = 1/6;
+      qf->wk[1] = 2/3;
+      qf->xk[0] = 0;
+      qf->xk[1] = 
+      return true;
+  }if (strcmp(name,"gauss3"))
+  {
+      qf->name = name;
+      qf->n = 3;
+      qf->wk[0] = 1/6;
+      qf->wk[1] = 2/3;
+      qf->wk[2] = 1/6;
+      qf->xk[0] = 0;
+      qf->xk[1] = 
+      qf->xk[2]
+      return true;
+  }
+    else 
+    {   
+      return false;
+    }
 }
 
 /* This function is not required ,but it may useful to debug */
