@@ -6,7 +6,10 @@ bool setQuadFormula(QuadFormula* qf, char* name)
 {
   if (strcmp(name,"left"))
   {
-      qf->name = name;
+    for (int i =  0; name[i] != '\0';i++)
+    {
+      qf->name[i] = name[i];
+    } 
       qf->n = 0;
       qf->wk[0] = 1;
       qf->xk[0] = 0;
@@ -14,7 +17,10 @@ bool setQuadFormula(QuadFormula* qf, char* name)
   }
   else if (strcmp(name,"right"))
   {
-      qf->name = name;
+    for (int i =  0; name[i] != '\0';i++)
+    {
+      qf->name[i] = name[i];
+    } 
       qf->n = 0;
       qf->wk[0] = 1;
       qf->xk[0] = 1;
@@ -22,7 +28,10 @@ bool setQuadFormula(QuadFormula* qf, char* name)
   }
   if (strcmp(name,"middle"))
   {
-      qf->name = name;
+    for (int i =  0; name[i] != '\0';)
+    {
+      qf->name[i] = name[i];
+    } 
       qf->n = 0;
       qf->wk[0] = 1;
       qf->xk[0] = 1/2;
@@ -30,7 +39,10 @@ bool setQuadFormula(QuadFormula* qf, char* name)
   }
   if (strcmp(name,"trapezes"))
   {
-      qf->name = name;
+      for (int i =  0; name[i] != '\0';i++)
+    {
+      qf->name[i] = name[i];
+    }
       qf->n = 1;
       qf->wk[0] = 1/2;
       qf->wk[1] = 1/2; 
@@ -40,34 +52,43 @@ bool setQuadFormula(QuadFormula* qf, char* name)
   }
   if (strcmp(name,"simpson"))
   {
-      qf->name = name;
+      for (int i =  0; name[i] != '\0';i++)
+    {
+      qf->name[i] = name[i];
+    } 
       qf->n = 3;
       qf->wk[0] = 1/6;
       qf->wk[1] = 2/3;
       qf->wk[2] = 1/6;
       qf->xk[0] = 0;
-      qf->xk[1] = 
+      qf->xk[1]; 
       return true;
   }
   if (strcmp(name,"gauss2"))
   {
-      qf->name = name;
+      for (int i =  0; name[i] != '\0';i++)
+    {
+      qf->name[i] = name[i];
+    } 
       qf->n = 2;
       qf->wk[0] = 1/6;
       qf->wk[1] = 2/3;
       qf->xk[0] = 0;
-      qf->xk[1] = 
+      qf->xk[1]; 
       return true;
   }if (strcmp(name,"gauss3"))
   {
-      qf->name = name;
+      for (int i =  0; name[i] != '\0';i++)
+    {
+      qf->name[i] = name[i];
+    } 
       qf->n = 3;
       qf->wk[0] = 1/6;
       qf->wk[1] = 2/3;
       qf->wk[2] = 1/6;
       qf->xk[0] = 0;
-      qf->xk[1] = 
-      qf->xk[2]
+      qf->xk[1]; 
+      qf->xk[2];
       return true;
   }
     else 
