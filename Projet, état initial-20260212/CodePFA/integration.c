@@ -121,7 +121,7 @@ double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf
       int res = 0;
       int len = b - a / N;
       for (int k = 0; k < qf->n; k++) {
-        res += qf->w[k] * f( ai + qf->x[k] * (bi - ai));
+        res += qf->wk[k] * f( ai + qf->xk[k] * (bi - ai));
 
       }
       res *= bi - ai;
