@@ -14,9 +14,10 @@ int main() {
   double I1, I2, I3;
   setQuadFormula(&qf, "trapezes");
   I1 = integrate(f, -1, 4, 10, &qf);
-  print()
+  printf("I1 = %f\n", I1);
   setQuadFormula(&qf, "middle");
   I2 = integrate(f, -1, 4, 10, &qf);
+  printf("I2 = %f\n", I2);
 }
 
 

@@ -26,9 +26,9 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[0] = 1;
       return true;
   }
-  if (strcmp(name,"middle"))
+  else if (strcmp(name,"middle"))
   {
-    for (int i =  0; name[i] != '\0';)
+    for (int i =  0; name[i] != '\0';i++)
     {
       qf->name[i] = name[i];
     } 
@@ -37,7 +37,7 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[0] = 1/2;
       return true;
   }
-  if (strcmp(name,"trapezes"))
+  else if (strcmp(name,"trapezes"))
   {
       for (int i =  0; name[i] != '\0';i++)
     {
@@ -50,7 +50,7 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[1] = 1;
       return true;
   }
-  if (strcmp(name,"simpson"))
+  else if (strcmp(name,"simpson"))
   {
       for (int i =  0; name[i] != '\0';i++)
     {
@@ -64,7 +64,7 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[1]; 
       return true;
   }
-  if (strcmp(name,"gauss2"))
+  else if (strcmp(name,"gauss2"))
   {
       for (int i =  0; name[i] != '\0';i++)
     {
@@ -76,7 +76,8 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[0] = 0;
       qf->xk[1]; 
       return true;
-  }if (strcmp(name,"gauss3"))
+  }
+  else if (strcmp(name,"gauss3"))
   {
       for (int i =  0; name[i] != '\0';i++)
     {
@@ -113,20 +114,19 @@ void printQuadFormula(QuadFormula* qf)
 */
 double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf)
 {
-  double inte = 0;
-
+  double inte = 0.0;
+  double len = (b - a) / N;
   for (int i = 0; i < N; i++) {
-      int ai = a + i * b - a / N;
-      int bi = a + (i + 1) * b - a / N;
-      int res = 0;
-      int len = b - a / N;
-      for (int k = 0; k < qf->n; k++) {
-        res += qf->wk[k] * f( ai + qf->xk[k] * (bi - ai));
+      double ai = a + i * len;
+      double bi = a + (i + 1) * len;
+      double res = 0.0;
+      for (int k = 0; k <= qf->n; k++) {
+        res = res + qf->wk[k] * f( ai + qf->xk[k] * (bi - ai));
 
       }
-      res *= bi - ai;
+      res = res * (bi - ai);
 
-    inte += res;
+    inte = inte + res;
 
   }
   return inte;
