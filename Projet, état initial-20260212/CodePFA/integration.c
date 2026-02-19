@@ -4,7 +4,17 @@
 
 bool setQuadFormula(QuadFormula* qf, char* name)
 {
-  if (strcmp(name,"left"))
+  for (int i = 0; i < 20; i++)
+  {
+    qf->name[i] = '\0';
+  }
+  for (int i = 0; i < 5; i++)
+  {
+    qf->wk[i] = 0.0;
+    qf->xk[i] = 0.0;
+  }
+
+  if (strcmp(name,"left") == 0)
   {
     for (int i =  0; name[i] != '\0';i++)
     {
@@ -15,56 +25,56 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[0] = 0;
       return true;
   }
-  else if (strcmp(name,"right"))
+  else if (strcmp(name,"right") == 0) 
   {
     for (int i =  0; name[i] != '\0';i++)
     {
       qf->name[i] = name[i];
     } 
       qf->n = 0;
-      qf->wk[0] = 1;
-      qf->xk[0] = 1;
+      qf->wk[0] = 1.0;
+      qf->xk[0] = 1.0;
       return true;
   }
-  else if (strcmp(name,"middle"))
+  else if (strcmp(name,"middle") == 0)
   {
     for (int i =  0; name[i] != '\0';i++)
     {
       qf->name[i] = name[i];
     } 
       qf->n = 0;
-      qf->wk[0] = 1;
-      qf->xk[0] = 1/2;
+      qf->wk[0] = 1.0;
+      qf->xk[0] = 0.5;
       return true;
   }
-  else if (strcmp(name,"trapezes"))
+  else if (strcmp(name,"trapezes") == 0)
   {
       for (int i =  0; name[i] != '\0';i++)
     {
       qf->name[i] = name[i];
     }
       qf->n = 1;
-      qf->wk[0] = 1/2;
-      qf->wk[1] = 1/2; 
-      qf->xk[0] = 0;
-      qf->xk[1] = 1;
+      qf->wk[0] = 0.5;
+      qf->wk[1] = 0.5; 
+      qf->xk[0] = 0.0;
+      qf->xk[1] = 1.0;
       return true;
   }
-  else if (strcmp(name,"simpson"))
+  else if (strcmp(name,"simpson") == 0)
   {
       for (int i =  0; name[i] != '\0';i++)
     {
       qf->name[i] = name[i];
     } 
       qf->n = 3;
-      qf->wk[0] = 1/6;
-      qf->wk[1] = 2/3;
-      qf->wk[2] = 1/6;
-      qf->xk[0] = 0;
+      qf->wk[0] = 1.0/6.0;
+      qf->wk[1] = 2.0/3.0;
+      qf->wk[2] = 1.0/6.0;
+      qf->xk[0] = 0.0;
       qf->xk[1]; 
       return true;
   }
-  else if (strcmp(name,"gauss2"))
+  else if (strcmp(name,"gauss2") ==0)
   {
       for (int i =  0; name[i] != '\0';i++)
     {
@@ -77,7 +87,7 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->xk[1]; 
       return true;
   }
-  else if (strcmp(name,"gauss3"))
+  else if (strcmp(name,"gauss3") == 0)
   {
       for (int i =  0; name[i] != '\0';i++)
     {
@@ -114,6 +124,7 @@ void printQuadFormula(QuadFormula* qf)
 */
 double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf)
 {
+  printf("Name = %s\n", qf->name);
   double inte = 0.0;
   double len = (b - a) / N;
   for (int i = 0; i < N; i++) {
@@ -122,12 +133,12 @@ double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf
       double res = 0.0;
       for (int k = 0; k <= qf->n; k++) {
         res = res + qf->wk[k] * f( ai + qf->xk[k] * (bi - ai));
-
+        printf("res = %lf\n", res);
+        printf("wk = %lf\n", qf->wk[k]);
+        printf("xk = %lf\n", qf->xk[k]);
       }
       res = res * (bi - ai);
-
-    inte = inte + res;
-
+      inte = inte + res;
   }
   return inte;
 }

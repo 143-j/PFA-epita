@@ -18,6 +18,7 @@ int main() {
   setQuadFormula(&qf, "middle");
   I2 = integrate(f, -1, 4, 10, &qf);
   printf("I2 = %f\n", I2);
+  return 0;
 }
 
 
