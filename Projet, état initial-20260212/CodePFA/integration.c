@@ -71,7 +71,8 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->wk[1] = 2.0/3.0;
       qf->wk[2] = 1.0/6.0;
       qf->xk[0] = 0.0;
-      qf->xk[1]; 
+      qf->xk[1] = 1.0/2.0;
+      qf->xk[2] = 1.0; 
       return true;
   }
   else if (strcmp(name,"gauss2") ==0)
@@ -81,10 +82,10 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->name[i] = name[i];
     } 
       qf->n = 2;
-      qf->wk[0] = 1/6;
-      qf->wk[1] = 2/3;
-      qf->xk[0] = 0;
-      qf->xk[1]; 
+      qf->wk[0] = 0.5;
+      qf->wk[1] = 0.5;
+      qf->xk[0] = 0.5 - 1.0/(2.0*sqrt(3.0));
+      qf->xk[1] = 0.5 + 1.0/(2.0*sqrt(3.0)); 
       return true;
   }
   else if (strcmp(name,"gauss3") == 0)
@@ -94,12 +95,12 @@ bool setQuadFormula(QuadFormula* qf, char* name)
       qf->name[i] = name[i];
     } 
       qf->n = 3;
-      qf->wk[0] = 1/6;
-      qf->wk[1] = 2/3;
-      qf->wk[2] = 1/6;
-      qf->xk[0] = 0;
-      qf->xk[1]; 
-      qf->xk[2];
+      qf->wk[0] = 5.0/18.0;
+      qf->wk[1] = 4.0/9.0;
+      qf->wk[2] = 5.0/18.0;
+      qf->xk[0] = 0.5 * (1-sqrt(0.6));
+      qf->xk[1] = 0.5;
+      qf->xk[2] = 0.5 * (1+sqrt(0.6));
       return true;
   }
     else 
@@ -132,11 +133,7 @@ double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf
       double bi = a + (i + 1) * len;
       double res = 0.0;
       for (int k = 0; k <= qf->n; k++) {
-        res = res + qf->wk[k] * f( ai + qf->xk[k] * (bi - ai));
-        printf("res = %lf\n", res);
-        printf("wk = %lf\n", qf->wk[k]);
-        printf("xk = %lf\n", qf->xk[k]);
-      }
+        res = res + qf->wk[k] * f( ai + qf->xk[k] * (bi - ai));}
       res = res * (bi - ai);
       inte = inte + res;
   }
@@ -145,7 +142,12 @@ double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf
 
 double integrate_dx(double (*f)(double), double a, double b, double dx, QuadFormula* qf)
 {
-  return 0.0;
+  int N = (int) round (abs(b-a/dx));
+  if (N == 0)
+  {
+    N = 1;
+  }  
+  return integrate(f,a,b,N,qf);
 }
 
 
