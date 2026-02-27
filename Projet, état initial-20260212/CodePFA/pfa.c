@@ -58,10 +58,16 @@ double optionPrice(Option* option)
   double z0 = (log(option->K/option->S0) - ((option->mu - (option->sig * option->sig)/2.0)) * option->T) / (option->sig * sqrt(option->T) );
   
   if (option->type == CALL) {
-    double C = option->S0 * exp(option->mu * option->T) * PHI(z0) * (option->sig * sqrt(option->T) - z0) - option->K * PHI(-z0)
+    double C = option->S0 * exp(option->mu * option->T) * PHI(option->sig * sqrt(option->T) - z0) - option->K * PHI(-z0);
+    return C;
   }
-  
-  return 0.0;
+  if (option->type == PUT) {
+    double P = option->K * PHI(z0) - option->S0 * exp(option->mu * option->T) * PHI(z0 - option->sig * sqrt(option->T));
+    return P;
+  }
+  else {
+    return 0.0;
+  }
 }
 
 
