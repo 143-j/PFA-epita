@@ -15,8 +15,24 @@
           The number of subdivisions will be N such that (b-a)/N ~ dt
 */
 bool init_integration(char* quadrature, double dt)
-{ 
-  return true;
+{
+  
+  
+  if (dt < 0) {
+    return false;
+  }
+
+  if (setQuadFormula(&pfaQF, quadrature)) {
+    
+    pfa_dt = dt;
+
+    return true;
+  }
+
+  else 
+  {   
+    return false;
+  }
 }
 
 
@@ -30,7 +46,8 @@ double phi(double x)
 /* Cumulative distribution function of the normal distribution */
 double PHI(double x)
 {
-  return 0.0;
+  double f = phi(x);
+  return 1.0/2.0 + integrate(&f, 0, x, pfa_dt, &pfaQF);
 }
 
 /* =====================================
@@ -38,6 +55,12 @@ double PHI(double x)
 */
 double optionPrice(Option* option)
 {
+  double z0 = (log(option->K/option->S0) - ((option->mu - (option->sig * option->sig)/2.0)) * option->T) / (option->sig * sqrt(option->T) );
+  
+  if (option->type == CALL) {
+    double C = option->S0 * exp(option->mu * option->T) * PHI(z0) * (option->sig * sqrt(option->T) - z0) - option->K * PHI(-z0)
+  }
+  
   return 0.0;
 }
 
