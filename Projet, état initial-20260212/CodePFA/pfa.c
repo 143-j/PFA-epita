@@ -16,10 +16,20 @@
 */
 bool init_integration(char* quadrature, double dt)
 { 
-  return true;
+  if (dt <= 0)
+  {
+    return false;
+  }
+  if (setQuadFormula(&pfaQF, quadrature) == false)
+  {
+    return false;
+  }
+  else 
+  {
+    pfa_dt = dt;
+    return true;
+  }
 }
-
-
 
 /* Density of the normal distribution */
 double phi(double x)
@@ -30,7 +40,7 @@ double phi(double x)
 /* Cumulative distribution function of the normal distribution */
 double PHI(double x)
 {
-  return 0.0;
+  return 0.5 * (integrate_dx(phi,0,x,pfa_dt,pfaQF));
 }
 
 /* =====================================
@@ -38,7 +48,27 @@ double PHI(double x)
 */
 double optionPrice(Option* option)
 {
-  return 0.0;
+  if (option != NULL)
+  {
+    double sig = option->sig;
+    double T = option->T;
+    double mu = option->mu;
+    double S0 = option->S0;
+    double K = option->K;
+    double z0 = log(K/S0) - (mu - sig * sig/2) * T;
+    if (option-> type == CALL)
+    {
+      return S0 * exp(mu*T) * PHI(sig * sqrt(T) - z0) - K* PHI(-z0);
+    }
+    else if (option-> type == PUT)
+    {
+      return K * PHI(z0) - S0 * exp(mu*T) * PHI(z0 - sig * sqrt(T));
+    }
+  }
+  else 
+  {
+    return -1.0;
+  }
 }
 
 
