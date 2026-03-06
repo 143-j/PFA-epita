@@ -125,7 +125,6 @@ void printQuadFormula(QuadFormula* qf)
 */
 double integrate(double (*f)(double), double a, double b, int N, QuadFormula* qf)
 {
-  printf("Name = %s\n", qf->name);
   double inte = 0.0;
   double len = (b - a) / N;
   for (int i = 0; i < N; i++) {

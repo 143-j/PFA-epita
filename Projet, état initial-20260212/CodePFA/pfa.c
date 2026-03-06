@@ -44,7 +44,7 @@ double phi(double x)
 /* Cumulative distribution function of the normal distribution */
 double PHI(double x)
 {
-  return 0.5 * (integrate_dx(phi,0,x,pfa_dt,&pfaQF));
+  return 0.5 + (integrate_dx(phi,0,x,pfa_dt,&pfaQF));
 }
 
 /* =====================================
@@ -59,7 +59,7 @@ double optionPrice(Option* option)
     double mu = option->mu;
     double S0 = option->S0;
     double K = option->K;
-    double z0 = log(K/S0) - (mu - sig * sig/2) * T;
+    double z0 = (log(K/S0) - (mu - sig * sig/2) * T) / (sig * sqrt(T));
     if (option-> type == CALL)
     {
       return S0 * exp(mu*T) * PHI(sig * sqrt(T) - z0) - K* PHI(-z0);
@@ -85,7 +85,11 @@ double optionPrice(Option* option)
 */
 double clientPDF_X(InsuredClient* client, double x)
 {
-  return (1 / client->s * x) * phi((log(x) - client-> m) / client->s);
+  if (x <= 0)
+  {
+    return 0.0;
+  }
+  return (phi((log(x) - client-> m) / client->s)) / (client->s * x);
 }
 
 
@@ -94,6 +98,10 @@ double clientPDF_X(InsuredClient* client, double x)
 */
 double clientCDF_X(InsuredClient* client, double x)
 {
+    if (x <= 0)
+    {
+      return 0.0;
+    }
   return PHI((log(x) - client -> m) / client -> s);
 }
 
@@ -102,22 +110,28 @@ double clientCDF_X(InsuredClient* client, double x)
    X1 and X2 are the reimbursements of the two claims from the client (assuming there are 
    two claims).
 */
-static InsuredClient* currentClient;
-static double currentX;
+static InsuredClient* localClient;
+static double localX;
 
-double f_x1x2(double t)
+static double localProductPDF(double t)
 {
-    double x1 = clientPDF_X(currentClient, t);
-    double x2 = clientPDF_X(currentClient, currentX - t);
-    return x1 * x2;
+  if (t <= 0 || localX - t <= 0)
+  {
+   return 0.0;
+  }
+  return clientPDF_X(localClient, localX - t) * clientPDF_X(localClient, t);
 }
 
 double clientPDF_X1X2(InsuredClient* client, double x)
 {
-  currentClient = client;
-  currentX = x;
-
-  return integrate_dx(f_x1x2, 0, x, pfa_dt, &pfaQF);
+   if ( x<=0 )
+  { 
+    return 0.0;
+  }
+  localClient = client;
+  localX = x;
+  printf("localProductPDF : %lf\n", localProductPDF(x));
+  return integrate_dx(localProductPDF, 0, x, pfa_dt, &pfaQF);
 }
 
 
@@ -125,17 +139,17 @@ double clientPDF_X1X2(InsuredClient* client, double x)
    X1 and X2 are the reimbursements of the two claims from the client (assuming there are 
    two claims).
 */
-double f_(double t) {
-  double res = clientPDF_X1X2(currentClient, t);
-  return res;
+static double localPDF_X1X2(double x)
+{
+  return clientPDF_X1X2(localClient, x);
+} 
 
-}
 double clientCDF_X1X2(InsuredClient* client, double x)
 {
-  currentClient = client;
-  currentX = x;
+  localClient = client;
+  localX = x;
 
-  return integrate_dx(f_, 0, x, pfa_dt, &pfaQF);
+  return integrate_dx(localPDF_X1X2, 0, x, pfa_dt, &pfaQF);
 }
 
 
