@@ -102,14 +102,21 @@ double clientCDF_X(InsuredClient* client, double x)
    X1 and X2 are the reimbursements of the two claims from the client (assuming there are 
    two claims).
 */
-double f_x1x2(double t, InsuredClient* client, double x) {
-    double x1 = clientPDF_X(client, t);
-    double x2 = clientPDF_X(client, x - t);
+static InsuredClient* currentClient;
+static double currentX;
+
+double f_x1x2(double t)
+{
+    double x1 = clientPDF_X(currentClient, t);
+    double x2 = clientPDF_X(currentClient, currentX - t);
     return x1 * x2;
-  }; 
+}
 
 double clientPDF_X1X2(InsuredClient* client, double x)
 {
+  currentClient = client;
+  currentX = x;
+
   return integrate_dx(f_x1x2, 0, x, pfa_dt, &pfaQF);
 }
 
@@ -118,9 +125,17 @@ double clientPDF_X1X2(InsuredClient* client, double x)
    X1 and X2 are the reimbursements of the two claims from the client (assuming there are 
    two claims).
 */
+double f_(double t) {
+  double res = clientPDF_X1X2(currentClient, t);
+  return res;
+
+}
 double clientCDF_X1X2(InsuredClient* client, double x)
 {
-  return integrate_dx(clientPDF_X1X2, 0, x, pfa_dt, &pfaQF);
+  currentClient = client;
+  currentX = x;
+
+  return integrate_dx(f_, 0, x, pfa_dt, &pfaQF);
 }
 
 
