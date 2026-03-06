@@ -44,7 +44,7 @@ double phi(double x)
 /* Cumulative distribution function of the normal distribution */
 double PHI(double x)
 {
-  return 0.5 * (integrate_dx(phi,0,x,pfa_dt,pfaQF));
+  return 0.5 * (integrate_dx(phi,0,x,pfa_dt,&pfaQF));
 }
 
 /* =====================================
@@ -85,7 +85,7 @@ double optionPrice(Option* option)
 */
 double clientPDF_X(InsuredClient* client, double x)
 {
-  return (1 / client->s * x) * phi((log(x) - client-> m) / client->s)
+  return (1 / client->s * x) * phi((log(x) - client-> m) / client->s);
 }
 
 
@@ -102,9 +102,18 @@ double clientCDF_X(InsuredClient* client, double x)
    X1 and X2 are the reimbursements of the two claims from the client (assuming there are 
    two claims).
 */
+double f_x1x2(double t, InsuredClient* client, double x) {
+    double x1 = clientPDF_X(client, t);
+    double x2 = clientPDF_X(client, x - t);
+    return x1 * x2;
+  }; 
+
 double clientPDF_X1X2(InsuredClient* client, double x)
 {
-  return integrate_dx(clientPDF_X()  ,0,x,pfa_dt,&pfaQF)
+
+  
+
+  return integrate_dx(f_x1x2, 0, x, pfa_dt, &pfaQF);
 }
 
 
@@ -114,7 +123,7 @@ double clientPDF_X1X2(InsuredClient* client, double x)
 */
 double clientCDF_X1X2(InsuredClient* client, double x)
 {
-  return integrate_dx();
+  return integrate_dx(clientPDF_X1X2, 0, x, pfa_dt, &pfaQF);
 }
 
 
