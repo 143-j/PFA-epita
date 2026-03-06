@@ -14,9 +14,9 @@ int main()
   Option option;
 
   option.type = PUT; /* Call or put option */
-  option.S0 = 100; /* Price of the underlying asset at time 0 */
+  option.S0 = 150; /* Price of the underlying asset at time 0 */
   option.K = 115; /* Strike of the option (prix d'exercice) */
-  option.T = 2; /* Expiry */
+  option.T = 5; /* Expiry */
   option.mu = 0.05;
   option.sig = 0.02;
 

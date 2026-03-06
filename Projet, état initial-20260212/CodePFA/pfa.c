@@ -130,7 +130,6 @@ double clientPDF_X1X2(InsuredClient* client, double x)
   }
   localClient = client;
   localX = x;
-  printf("localProductPDF : %lf\n", localProductPDF(x));
   return integrate_dx(localProductPDF, 0, x, pfa_dt, &pfaQF);
 }
 
