@@ -8,5 +8,6 @@
 /* Code here anything you want to test your pfa functions and to show your numerical results */
 int main()
 {
-  return 0;
+  struct Option *O;
+  
 }

@@ -110,9 +110,6 @@ double f_x1x2(double t, InsuredClient* client, double x) {
 
 double clientPDF_X1X2(InsuredClient* client, double x)
 {
-
-  
-
   return integrate_dx(f_x1x2, 0, x, pfa_dt, &pfaQF);
 }
 
@@ -133,7 +130,18 @@ double clientCDF_X1X2(InsuredClient* client, double x)
 */
 double clientCDF_S(InsuredClient* client, double x)
 {
-  return 0.0;
+  if (x < 0)
+  {
+    return 0.0;
+  }
+  else if (x == 0)
+  {
+    return client->p[0];
+  }
+  else 
+  {
+    return client->p[0] + client->p[1] * clientCDF_X(client, x) + client->p[2] * clientCDF_X1X2(client, x); 
+  }
 }
 
 
