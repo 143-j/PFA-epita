@@ -7,7 +7,7 @@
 #include "integration.h"
 double f(double t)
 {
-  return sin(t*t);
+  return sin(ln(t));
 }
 
 double g(double t)

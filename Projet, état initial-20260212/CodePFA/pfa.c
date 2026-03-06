@@ -15,19 +15,23 @@
           The number of subdivisions will be N such that (b-a)/N ~ dt
 */
 bool init_integration(char* quadrature, double dt)
-{ 
-  if (dt <= 0)
-  {
+{
+  
+  
+  if (dt < 0) {
     return false;
   }
-  if (setQuadFormula(&pfaQF, quadrature) == false)
-  {
-    return false;
-  }
-  else 
-  {
+
+  if (setQuadFormula(&pfaQF, quadrature)) {
+    
     pfa_dt = dt;
+
     return true;
+  }
+
+  else 
+  {   
+    return false;
   }
 }
 
@@ -81,7 +85,7 @@ double optionPrice(Option* option)
 */
 double clientPDF_X(InsuredClient* client, double x)
 {
-  return 0.0;
+  return (1 / client->s * x) * phi((log(x) - client-> m) / client->s)
 }
 
 
@@ -90,7 +94,7 @@ double clientPDF_X(InsuredClient* client, double x)
 */
 double clientCDF_X(InsuredClient* client, double x)
 {
-  return 0.0;
+  return PHI((log(x) - client -> m) / client -> s);
 }
 
 
@@ -100,7 +104,7 @@ double clientCDF_X(InsuredClient* client, double x)
 */
 double clientPDF_X1X2(InsuredClient* client, double x)
 {
-  return 0.0;
+  return integrate_dx(clientPDF_X() *  ,0,x,pfa_dt,&pfaQF)
 }
 
 
@@ -110,7 +114,7 @@ double clientPDF_X1X2(InsuredClient* client, double x)
 */
 double clientCDF_X1X2(InsuredClient* client, double x)
 {
-  return 0.0;
+  return integrate_dx();
 }
 
 
