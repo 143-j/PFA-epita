@@ -104,7 +104,7 @@ double clientCDF_X(InsuredClient* client, double x)
 */
 double clientPDF_X1X2(InsuredClient* client, double x)
 {
-  return integrate_dx(clientPDF_X() *  ,0,x,pfa_dt,&pfaQF)
+  return integrate_dx(clientPDF_X()  ,0,x,pfa_dt,&pfaQF)
 }
 
 
